@@ -14,10 +14,12 @@ const static int D2 = 2;
 
 static int randomNum = random(10,40);
 static int randomNum2 = random(10,40);
-//pasarea
+static int joysticSW = 25;
+extern bool jocActiv;
+//Bird
 static int px = 20,py = 30;
 static int raza = 4;
-//animatii
+//Animations
 const uint8_t pasare1[] PROGMEM = {
   0b00000000,
   0b00111100,
@@ -51,11 +53,10 @@ const uint8_t pasare3[] PROGMEM = {
   0b00000000
 };
 
-//stochezi in UFrame millis() pentru a nu incurca cu MilisTrecute!!!
 static int frame = 0;
 static int UFrame;
 
-//tub1;tub2
+//pipe 1 and 2
 static int tx = 100,tw = 5;
 static int tx2 =150 ,tw2 = 5;
 
@@ -196,6 +197,16 @@ void Coliziune()
   }
   return;
 }
+static void IesireJoc()
+{
+     GameOver = false;
+        start=false;
+        tx = 100;
+        tx2 = 150;
+        randomNum = random(10,40);
+        randomNum2 = random(10,40);
+        jocActiv = false;
+}
 void FPJoc() {
   display.clearDisplay();
 if(start == false)
@@ -227,6 +238,8 @@ if(tx2 < 5)
   randomNum2 = random(10,40);
   score++;
 }
+if(digitalRead(joysticSW) == LOW)
+IesireJoc();
 
 delay(20);
 }}

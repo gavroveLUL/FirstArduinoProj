@@ -9,16 +9,18 @@
 #define LATIME_ECRAN 64
 
 Adafruit_SSD1306 display(LUNGIME_ECRAN, LATIME_ECRAN, &Wire, -1);
+//SCL going to D22
+//SDA going to D21
 
 // Button
-const int D2 = 2;
-const int joystickX = 34;
-const int joystickY = 35;
-const int joystickSW = 25;
+const int D2 = 2; //input pin going to D2
+const int joystickX = 34; //going to D34
+const int joystickY = 35; //going to D35
+const int joystickSW = 25; //going to D25 
 static int i = 0;
 long TimpTrecut = 0;
 long UltimulTimpTrecut = 0;
-bool jocActiv = false;
+ bool jocActiv = false;
 uint8_t joystick[4];
 
 
@@ -41,6 +43,7 @@ void setup() {
     setupPong();
     millis();
 }
+//using an int for browsing the menu 
 void MeniuActiv()
 {display.setCursor(40,0);
   display.setTextSize(1);
@@ -61,18 +64,18 @@ display.println("FlappyBird");
 }
 void VariabilaI()
 {
-  TimpTrecut = millis();
-  if(millis() - TimpTrecut > UltimulTimpTrecut)
-  {
-    if(analogRead(joystickX)  > 3000 && i < 1)
-{    i++;
-        UltimulTimpTrecut = TimpTrecut;
+    if (millis() - TimpTrecut > 250) {
+        int x = analogRead(joystickX);
 
-}    else if(analogRead(joystickX ) < 1500 && i > 0)
-{    i--;
-    UltimulTimpTrecut = TimpTrecut;
-}     
-  }
+        if (x > 3000 && i < 1) {
+            i++;
+            TimpTrecut = millis();
+        }
+        else if (x < 1500 && i > 0) {
+            i--;
+            TimpTrecut = millis();
+        }
+    }
 }
 void VerificaApasare()
 {
@@ -89,7 +92,9 @@ else
 PongJoc();
   }
   else
-    {VariabilaI();
+    {InitFlappyBird();
+    setupPong();
+      VariabilaI();
     display.setCursor(1,1);
     display.clearDisplay();
     MeniuActiv();
